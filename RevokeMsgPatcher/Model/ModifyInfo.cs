@@ -11,8 +11,6 @@ namespace RevokeMsgPatcher.Model
     {
         public string Name { get; set; }
 
-        //public string RelativePath { get; set; }
-
         public string Version { get; set; }
 
         public string SHA1Before { get; set; }

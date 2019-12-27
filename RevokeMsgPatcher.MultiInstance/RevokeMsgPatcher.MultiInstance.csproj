@@ -51,8 +51,10 @@
     <Compile Include="FormMultiInstance.Designer.cs">
       <DependentUpon>FormMultiInstance.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProcessUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WechatProcess.cs" />
     <EmbeddedResource Include="FormMultiInstance.resx">
       <DependentUpon>FormMultiInstance.cs</DependentUpon>
     </EmbeddedResource>

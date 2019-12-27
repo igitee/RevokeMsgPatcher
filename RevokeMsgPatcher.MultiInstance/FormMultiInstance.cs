@@ -1,14 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RevokeMsgPatcher.MultiInstance
@@ -18,56 +10,6 @@ namespace RevokeMsgPatcher.MultiInstance
         public FormMultiInstance()
         {
             InitializeComponent();
-            string installFolder = FindInstallPathFromRegistry("Wechat");
-            if (!string.IsNullOrEmpty(installFolder))
-            {
-                string wechatPath = Path.Combine(installFolder, "WeChat.exe");
-                if (File.Exists(wechatPath))
-                {
-                    txtPath.Text = wechatPath;
-                }
-            }
-        }
-
-        private void btnChoosePath_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Multiselect = false,
-                Title = "请选择微信启动主程序",
-                Filter = "微信主程序|WeChat.exe"
-            };
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                txtPath.Text = dialog.FileName;
-            }
-        }
-
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(txtPath.Text))
-            {
-                // 检测微信进程是否存在
-                Process[] ps = Process.GetProcessesByName("WeChat");
-                if (ps.Length > 0)
-                {
-                    DialogResult result = MessageBox.Show("当前存在运行中的微信进程，请先关闭当前微信才能使用该功能。点击【确定】强制关闭当前所有微信进程并进行多开，点击【取消】不做任何处理。", "当前存在运行中的微信进程", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                    if (result == DialogResult.OK)
-                    {
-                        foreach (Process p in ps)
-                            p.Kill();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                // 启动多个实例
-                for (int i = 0; i < startNum.Value; i++)
-                {
-                    Process.Start(txtPath.Text);
-                }
-            }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -75,37 +17,101 @@ namespace RevokeMsgPatcher.MultiInstance
             Process.Start("https://github.com/huiyadanli/RevokeMsgPatcher");
         }
 
-        /// <summary>
-        /// 从注册表中寻找安装路径
-        /// </summary>
-        /// <param name="uninstallKeyName">
-        /// 安装信息的注册表键名
-        /// 微信：WeChat
-        /// QQ：{052CFB79-9D62-42E3-8A15-DE66C2C97C3E} 
-        /// TIM：TIM
-        /// </param>
-        /// <returns>安装路径</returns>
-        public static string FindInstallPathFromRegistry(string uninstallKeyName)
+        private void btnStartTimer_Click(object sender, EventArgs e)
         {
-            try
+            mutexHandleCloseTimer.Start();
+            btnStartTimer.Enabled = false;
+            btnStopTimer.Enabled = true;
+        }
+
+        private void btnStopTimer_Click(object sender, EventArgs e)
+        {
+            mutexHandleCloseTimer.Stop();
+            btnStartTimer.Enabled = true;
+            btnStopTimer.Enabled = false;
+        }
+
+        private List<WechatProcess> wechatProcesses = new List<WechatProcess>();
+
+        private void mutexHandleCloseTimer_Tick(object sender, EventArgs e)
+        {
+            Process[] processes = Process.GetProcessesByName("WeChat");
+            Console.WriteLine("WeChat进程数：" + processes.Length);
+            // 添加新进程
+            foreach (Process p in processes)
             {
-                RegistryKey key = Registry.LocalMachine.OpenSubKey($@"Software\Microsoft\Windows\CurrentVersion\Uninstall\{uninstallKeyName}");
-                if (key == null)
+                int i = 0;
+                for (i = 0; i < wechatProcesses.Count; i++)
                 {
-                    return null;
+                    WechatProcess wechatProcess = wechatProcesses[i];
+                    if (wechatProcess.Proc.Id == p.Id)
+                    {
+                        break;
+                    }
                 }
-                object installLocation = key.GetValue("InstallLocation");
-                key.Close();
-                if (installLocation != null && !string.IsNullOrEmpty(installLocation.ToString()))
+                if (i == wechatProcesses.Count)
                 {
-                    return installLocation.ToString();
+                    wechatProcesses.Add(new WechatProcess(p));
                 }
             }
-            catch (Exception e)
+            // 关闭所有存在互斥句柄的进程
+            int num = 0;
+            for (int i = wechatProcesses.Count - 1; i >= 0; i--)
             {
-                Console.WriteLine(e.Message);
+                WechatProcess wechatProcess = wechatProcesses[i];
+                if (!wechatProcess.MutexClosed)
+                {
+                    wechatProcess.MutexClosed = ProcessUtil.CloseMutexHandle(wechatProcess.Proc);
+                    Console.WriteLine("进程：" + wechatProcess.Proc.Id + ",关闭互斥句柄：" + wechatProcess.MutexClosed);
+                }
+                else
+                {
+                    if (wechatProcess.Proc.HasExited)
+                    {
+                        // 移除不存在的线程
+                        wechatProcesses.RemoveAt(i);
+                    }
+                    else
+                    {
+                        num++;
+                    }
+
+                }
             }
-            return null;
+            lblProcNum.Text = "当前微信数量：" + num.ToString();
+        }
+
+        private void btnKillAll_Click(object sender, EventArgs e)
+        {
+            Process[] processes = Process.GetProcessesByName("WeChat");
+            if (processes.Length > 0)
+            {
+                foreach (Process p in processes)
+                {
+                    p.Kill();
+                }
+                MessageBox.Show("已经关闭所有微信进程，共" + processes.Length + "个", "提示");
+            }
+            else
+            {
+                MessageBox.Show("当前无微信进程", "提示");
+            }
+        }
+
+        private void btnCloseAllMutex_Click(object sender, EventArgs e)
+        {
+            Process[] processes = Process.GetProcessesByName("WeChat");
+            ProcessUtil.CloseMutexHandle(processes);
+        }
+
+        private void lblHowToUse_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/huiyadanli/RevokeMsgPatcher");
+        }
+
+        private void FormMultiInstance_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            mutexHandleCloseTimer.Stop();
         }
     }
 }

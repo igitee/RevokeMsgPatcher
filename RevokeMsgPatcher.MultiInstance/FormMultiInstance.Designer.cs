@@ -28,159 +28,223 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtPath = new System.Windows.Forms.TextBox();
-            this.lblPathTag = new System.Windows.Forms.Label();
-            this.btnChoosePath = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.startNum = new System.Windows.Forms.NumericUpDown();
-            this.btnStart = new System.Windows.Forms.Button();
+            this.components = new System.ComponentModel.Container();
+            this.btnStartTimer = new System.Windows.Forms.Button();
+            this.btnKillAll = new System.Windows.Forms.Button();
+            this.mutexHandleCloseTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnCloseAllMutex = new System.Windows.Forms.Button();
+            this.btnStopTimer = new System.Windows.Forms.Button();
+            this.lblProcNum = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.startNum)).BeginInit();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblHowToUse = new System.Windows.Forms.LinkLabel();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // txtPath
+            // btnStartTimer
             // 
-            this.txtPath.Location = new System.Drawing.Point(86, 60);
-            this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(332, 21);
-            this.txtPath.TabIndex = 7;
+            this.btnStartTimer.Location = new System.Drawing.Point(158, 46);
+            this.btnStartTimer.Name = "btnStartTimer";
+            this.btnStartTimer.Size = new System.Drawing.Size(91, 23);
+            this.btnStartTimer.TabIndex = 99;
+            this.btnStartTimer.Text = "启动多开";
+            this.btnStartTimer.UseVisualStyleBackColor = true;
+            this.btnStartTimer.Click += new System.EventHandler(this.btnStartTimer_Click);
             // 
-            // lblPathTag
+            // btnKillAll
             // 
-            this.lblPathTag.AutoSize = true;
-            this.lblPathTag.Location = new System.Drawing.Point(15, 63);
-            this.lblPathTag.Name = "lblPathTag";
-            this.lblPathTag.Size = new System.Drawing.Size(65, 12);
-            this.lblPathTag.TabIndex = 6;
-            this.lblPathTag.Text = "微信路径：";
+            this.btnKillAll.Location = new System.Drawing.Point(69, 41);
+            this.btnKillAll.Name = "btnKillAll";
+            this.btnKillAll.Size = new System.Drawing.Size(118, 23);
+            this.btnKillAll.TabIndex = 17;
+            this.btnKillAll.Text = "关闭所有微信进程";
+            this.btnKillAll.UseVisualStyleBackColor = true;
+            this.btnKillAll.Click += new System.EventHandler(this.btnKillAll_Click);
             // 
-            // btnChoosePath
+            // mutexHandleCloseTimer
             // 
-            this.btnChoosePath.Location = new System.Drawing.Point(424, 59);
-            this.btnChoosePath.Name = "btnChoosePath";
-            this.btnChoosePath.Size = new System.Drawing.Size(36, 23);
-            this.btnChoosePath.TabIndex = 8;
-            this.btnChoosePath.Text = "...";
-            this.btnChoosePath.UseVisualStyleBackColor = true;
-            this.btnChoosePath.Click += new System.EventHandler(this.btnChoosePath_Click);
+            this.mutexHandleCloseTimer.Interval = 500;
+            this.mutexHandleCloseTimer.Tick += new System.EventHandler(this.mutexHandleCloseTimer_Tick);
             // 
-            // label1
+            // btnCloseAllMutex
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(84, 151);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(293, 24);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "只要我打开微信的速度足够快，我就多开无限个微信。\r\n我为什么能手动双开微信，别问，问就是手速快。";
+            this.btnCloseAllMutex.Location = new System.Drawing.Point(53, 80);
+            this.btnCloseAllMutex.Name = "btnCloseAllMutex";
+            this.btnCloseAllMutex.Size = new System.Drawing.Size(152, 23);
+            this.btnCloseAllMutex.TabIndex = 18;
+            this.btnCloseAllMutex.Text = "清理所有微信的互斥句柄";
+            this.btnCloseAllMutex.UseVisualStyleBackColor = true;
+            this.btnCloseAllMutex.Click += new System.EventHandler(this.btnCloseAllMutex_Click);
             // 
-            // label2
+            // btnStopTimer
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 95);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "多开个数：";
+            this.btnStopTimer.Enabled = false;
+            this.btnStopTimer.Location = new System.Drawing.Point(158, 75);
+            this.btnStopTimer.Name = "btnStopTimer";
+            this.btnStopTimer.Size = new System.Drawing.Size(91, 23);
+            this.btnStopTimer.TabIndex = 98;
+            this.btnStopTimer.Text = "停止";
+            this.btnStopTimer.UseVisualStyleBackColor = true;
+            this.btnStopTimer.Click += new System.EventHandler(this.btnStopTimer_Click);
             // 
-            // startNum
+            // lblProcNum
             // 
-            this.startNum.Location = new System.Drawing.Point(86, 91);
-            this.startNum.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.startNum.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.startNum.Name = "startNum";
-            this.startNum.Size = new System.Drawing.Size(55, 21);
-            this.startNum.TabIndex = 12;
-            this.startNum.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+            this.lblProcNum.AutoSize = true;
+            this.lblProcNum.Location = new System.Drawing.Point(158, 23);
+            this.lblProcNum.Name = "lblProcNum";
+            this.lblProcNum.Size = new System.Drawing.Size(95, 12);
+            this.lblProcNum.TabIndex = 20;
+            this.lblProcNum.Text = "当前微信数量：0";
             // 
-            // btnStart
+            // tabControl1
             // 
-            this.btnStart.Location = new System.Drawing.Point(369, 91);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(91, 23);
-            this.btnStart.TabIndex = 13;
-            this.btnStart.Text = "点击启动！";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(271, 146);
+            this.tabControl1.TabIndex = 21;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Controls.Add(this.btnStopTimer);
+            this.tabPage1.Controls.Add(this.lblProcNum);
+            this.tabPage1.Controls.Add(this.btnStartTimer);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(263, 120);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "自动模式";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.lblHowToUse);
+            this.tabPage2.Controls.Add(this.btnCloseAllMutex);
+            this.tabPage2.Controls.Add(this.btnKillAll);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(263, 120);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "手动功能";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.label1);
+            this.tabPage3.Controls.Add(this.linkLabel1);
+            this.tabPage3.Controls.Add(this.label3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(263, 120);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "关于";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(284, 95);
+            this.linkLabel1.Location = new System.Drawing.Point(160, 88);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(41, 12);
-            this.linkLabel1.TabIndex = 15;
+            this.linkLabel1.TabIndex = 16;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "GitHub";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(177, 95);
+            this.label3.Location = new System.Drawing.Point(53, 88);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 12);
-            this.label3.TabIndex = 14;
+            this.label3.TabIndex = 15;
             this.label3.Text = "软件主页(开源)：";
             // 
-            // label4
+            // textBox1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(323, 36);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "注意：\r\n1. 使用本程序多开前不能存在正在运行的微信进程。\r\n2. 多开的成功率取决于你的机器性能，不保证每次都能成功";
+            this.textBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBox1.Location = new System.Drawing.Point(7, 14);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(144, 92);
+            this.textBox1.TabIndex = 22;
+            this.textBox1.Text = "1.使用方法：点击【启动多开】之后，就可以启动多个微信了。\r\n2.注意：启动多个微信频率太快时，可能会失败。";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(23, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(221, 61);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "本工具是\r\n【 PC版微信/QQ/TIM防撤回补丁】\r\n的额外产物\r\n更多信息可以在软件主页查看";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblHowToUse
+            // 
+            this.lblHowToUse.AutoSize = true;
+            this.lblHowToUse.Location = new System.Drawing.Point(96, 16);
+            this.lblHowToUse.Name = "lblHowToUse";
+            this.lblHowToUse.Size = new System.Drawing.Size(65, 12);
+            this.lblHowToUse.TabIndex = 19;
+            this.lblHowToUse.TabStop = true;
+            this.lblHowToUse.Text = "如何使用？";
+            this.lblHowToUse.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblHowToUse_LinkClicked);
             // 
             // FormMultiInstance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 133);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.startNum);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtPath);
-            this.Controls.Add(this.lblPathTag);
-            this.Controls.Add(this.btnChoosePath);
+            this.ClientSize = new System.Drawing.Size(271, 146);
+            this.Controls.Add(this.tabControl1);
+            this.MaximizeBox = false;
             this.Name = "FormMultiInstance";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "微信多开小工具";
-            ((System.ComponentModel.ISupportInitialize)(this.startNum)).EndInit();
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMultiInstance_FormClosed);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtPath;
-        private System.Windows.Forms.Label lblPathTag;
-        private System.Windows.Forms.Button btnChoosePath;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown startNum;
-        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnStartTimer;
+        private System.Windows.Forms.Button btnKillAll;
+        private System.Windows.Forms.Timer mutexHandleCloseTimer;
+        private System.Windows.Forms.Button btnCloseAllMutex;
+        private System.Windows.Forms.Button btnStopTimer;
+        private System.Windows.Forms.Label lblProcNum;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel lblHowToUse;
     }
 }
 

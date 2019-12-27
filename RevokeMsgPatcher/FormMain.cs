@@ -210,11 +210,10 @@ namespace RevokeMsgPatcher
         private async void FormMain_Load(object sender, EventArgs e)
         {
             // 异步获取最新的补丁信息
-            string json = await GetPathJsonAsync();
+            string json = await HttpUtil.GetPatchJsonAsync();
             if (string.IsNullOrEmpty(json))
             {
                 lblUpdatePachJson.Text = "[ 获取最新补丁信息失败 ]";
-
             }
             else
             {
@@ -245,28 +244,6 @@ namespace RevokeMsgPatcher
                     lblUpdatePachJson.Text = "[ 更换新配置时异常 ]";
                 }
             }
-        }
-
-        private async Task<string> GetPathJsonAsync()
-        {
-            string downStr = null;
-            try
-            {
-                downStr = await HttpUtil.Client.GetStringAsync("https://huiyadanli.coding.me/i/revokemsg/05.json");
-            }
-            catch (Exception ex1)
-            {
-                Console.WriteLine(ex1.Message);
-                try
-                {
-                    downStr = await HttpUtil.Client.GetStringAsync("https://www.huiyadan.com/i/revokemsg/05.json");
-                }
-                catch (Exception ex2)
-                {
-                    Console.WriteLine(ex2.Message);
-                }
-            }
-            return downStr;
         }
 
         private void lblUpdatePachJson_Click(object sender, EventArgs e)
@@ -311,7 +288,6 @@ namespace RevokeMsgPatcher
                 modifier = (QQLiteModifier)rbtQQLite.Tag;
             }
             txtPath.Text = modifier.FindInstallPath();
-            ga.RequestPageView($"{GetCheckedRadioButtonNameEn()}/{lblVersion.Text}/switch", "切换标签页");
             EnableAllButton(true);
             lblVersion.Text = "";
             btnRestore.Enabled = false;
@@ -322,6 +298,7 @@ namespace RevokeMsgPatcher
                 lblVersion.Text = modifier.GetVersion();
                 btnRestore.Enabled = modifier.BackupExists();
             }
+            ga.RequestPageView($"{GetCheckedRadioButtonNameEn()}/{lblVersion.Text}/switch", "切换标签页");
         }
 
         private string GetCheckedRadioButtonNameEn()
